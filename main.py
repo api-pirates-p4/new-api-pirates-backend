@@ -11,7 +11,6 @@ from dotenv import load_dotenv
 from api.veteran_api import veteran_api
 from database.schema import create_tables
 from model.veteran import initVeteran
-app.register_blueprint(veteran_api)
 # import "objects" from "this" project
 from __init__ import app, db, login_manager  # Key Flask objects 
 # API endpoints
@@ -83,6 +82,8 @@ app.register_blueprint(feedback_api)
 app.register_blueprint(data_export_import_api)  # Register the data export/import API
 app.register_blueprint(joke_api)  # Register the joke API blueprint
 app.register_blueprint(post_api)  # Register the social media post API
+
+app.register_blueprint(veteran_api)
 # app.register_blueprint(announcement_api) ##temporary revert
 
 # Jokes file initialization
