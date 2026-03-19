@@ -7,7 +7,11 @@ from flask.cli import AppGroup
 from flask_login import current_user, login_required
 from flask import current_app
 from dotenv import load_dotenv
-
+#veteran API imports
+from api.veteran_api import veteran_api
+from database.schema import create_tables
+from model.veteran import initVeteran
+app.register_blueprint(veteran_api)
 # import "objects" from "this" project
 from __init__ import app, db, login_manager  # Key Flask objects 
 # API endpoints
@@ -318,6 +322,8 @@ def generate_data():
     initMicroblogs()
     initPersonas()
     initPersonaUsers()
+    create_tables()
+    initVeteran()
 
 # Register the custom command group with the Flask application
 app.cli.add_command(custom_cli)
