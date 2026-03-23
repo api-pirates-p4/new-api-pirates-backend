@@ -3,6 +3,8 @@ from datetime import datetime
 from urllib.parse import urljoin, urlparse
 from flask import abort, redirect, render_template, request, send_from_directory, url_for, jsonify, current_app, g # import render_template from "public" flask libraries
 from flask_login import current_user, login_user, logout_user
+from flask import Flask
+from flask_cors import CORS
 from flask.cli import AppGroup
 from flask_login import current_user, login_required
 from flask import current_app
@@ -46,6 +48,9 @@ from model.persona import Persona, initPersonas, initPersonaUsers
 from model.post import Post, init_posts
 from model.microblog import MicroBlog, Topic, initMicroblogs
 from hacks.jokes import initJokes 
+from api.volunteer import volunteer_api
+from api.titanic import titanic_api
+
 # from model.announcement import Announcement ##temporary revert
 
 # server only Views
@@ -55,6 +60,8 @@ import requests
 
 # Load environment variables
 load_dotenv()
+app = Flask(__name__)
+CORS(app, supports_credentials=True)
 
 app.config['KASM_SERVER'] = os.getenv('KASM_SERVER')
 app.config['KASM_API_KEY'] = os.getenv('KASM_API_KEY')
@@ -84,11 +91,13 @@ app.register_blueprint(joke_api)  # Register the joke API blueprint
 app.register_blueprint(post_api)  # Register the social media post API
 
 app.register_blueprint(veteran_api)
+app.register_blueprint(volunteer_api)
+
+app.register_blueprint(titanic_api)
 # app.register_blueprint(announcement_api) ##temporary revert
 
 # Jokes file initialization
-with app.app_context():
-    initJokes()
+
 
 # Tell Flask-Login the view function name of your login route
 login_manager.login_view = "login"
@@ -328,10 +337,14 @@ def generate_data():
 
 # Register the custom command group with the Flask application
 app.cli.add_command(custom_cli)
-        
+
+@custom_cli.command('generate_data')
+def generate_data():
+    initTitanic()
+
 # this runs the flask application on the development server
 if __name__ == "__main__":
     host = "0.0.0.0"
-    port = app.config['FLASK_PORT']
+    port = int(os.environ.get('FLASK_PORT', 8587))  # Default to 8587 if FLASK_PORT is not set
     print(f"** Server running: http://localhost:{port}")  # Pretty link
     app.run(debug=True, host=host, port=port, use_reloader=False)

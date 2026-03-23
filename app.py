@@ -2,6 +2,8 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from flask_restful import Api, Resource
+from volunteer_model import VolunteerModel
+volunteer_model = VolunteerModel()
 
 app = Flask(__name__)
 CORS(app, supports_credentials=True, origins='*')
@@ -54,6 +56,20 @@ class DataAPI(Resource):
 
 api.add_resource(DataAPI, '/api/data')
 
+class VolunteerAPI(Resource):                       # ← new
+    def post(self):
+        data = request.get_json()
+        if not data or not data.get("first_name") or not data.get("email"):
+            return {"error": "first_name and email are required"}, 400
+        volunteer_model.create(data)
+        return {"message": "Volunteer application submitted!"}, 201
+
+    def get(self):
+        return jsonify(volunteer_model.read())
+    
+api.add_resource(DataAPI, '/api/data')
+api.add_resource(VolunteerAPI, '/api/volunteers')
+
 # Wee can use @app.route for HTML endpoints, this will be style for Admin UI
 @app.route('/')
 def say_hello():
@@ -71,3 +87,4 @@ def say_hello():
 
 if __name__ == '__main__':
     app.run(port=5001)
+
