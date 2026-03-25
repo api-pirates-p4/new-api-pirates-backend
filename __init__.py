@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS
 from flask_login import LoginManager
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
@@ -13,7 +14,7 @@ load_dotenv()
 
 # Setup of key Flask object (app)
 app = Flask(__name__)
-
+CORS(app)
 # Configure Flask Port, default to 8587 which is same as Docker setup
 app.config['FLASK_PORT'] = int(os.environ.get('FLASK_PORT') or 8587)
 

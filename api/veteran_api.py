@@ -209,3 +209,21 @@ class VeteranAPI:
     api.add_resource(_ListSubmissions,  '/submissions')
     api.add_resource(_Stats,            '/stats')
     api.add_resource(_FeatureWeights,   '/weights')
+    class _Retrain(Resource):
+        def post(self):
+            """
+            ORCHESTRATOR: POST /api/veteran/retrain
+            Clears the singleton and retrains on seed + all saved submissions.
+            """
+            try:
+                from model.veteran import VeteranModel, initVeteran
+                VeteranModel._instance = None
+                initVeteran()
+                weights = get_feature_weights()
+                log_feature_importances(weights)
+                return jsonify({'status': 'retrained', 'message': 'Model retrained on seed + real submissions'})
+            except Exception as exc:
+                body, status = format_error_response(exc)
+                return body, status
+
+    api.add_resource(_Retrain, '/retrain')
