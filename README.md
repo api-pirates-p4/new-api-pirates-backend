@@ -61,7 +61,7 @@ pip install -r requirements.txt
 
   ```shell
   # Port configuration
-  # FLASK_PORT=8001
+  # FLASK_PORT=8426
   # Admin user reset password 
   DEFAULT_PASSWORD='123Qwerty!'
   DEFAULT_PFP='default.png'
@@ -120,11 +120,11 @@ pip install -r requirements.txt
     - Start with Play button
       - Play button sub option contains Debug
     - Click on localhost:8087 in terminal to launch
-      - Output window will contain page to launch http://localhost:8587
+      - Output window will contain page to launch http://localhost:8426
     - Login using your secrets from env
 
   - Basic API test
-    - [Jokes](http://localhost:8587/api/jokes/)
+    - [Jokes](http://localhost:8426/api/jokes/)
 
 ### User Operations
 | Purpose | Correct Endpoint | What It Does |

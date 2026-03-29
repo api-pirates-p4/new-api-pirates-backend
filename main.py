@@ -345,6 +345,6 @@ def generate_data():
 # this runs the flask application on the development server
 if __name__ == "__main__":
     host = "0.0.0.0"
-    port = int(os.environ.get('FLASK_PORT', 8587))  # Default to 8587 if FLASK_PORT is not set
+    port = int(os.environ.get('FLASK_PORT', 8426))  # Default to 8426 if FLASK_PORT is not set
     print(f"** Server running: http://localhost:{port}")  # Pretty link
     app.run(debug=True, host=host, port=port, use_reloader=False)
