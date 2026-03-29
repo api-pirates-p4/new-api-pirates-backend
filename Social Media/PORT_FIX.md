@@ -45,7 +45,7 @@ Your `config.js` should look something like this:
 
 ```javascript
 // Backend API Configuration
-export const javaURI = "http://localhost:8426";  // ← Make sure it's 8587!
+export const javaURI = "http://localhost:8426";  
 
 export const fetchOptions = {
     method: 'GET',
@@ -124,14 +124,14 @@ Depending on your frontend setup:
 
 1. **Backend is on 8426** - This is confirmed and working ✅
 2. **Don't change backend** - It's correct!
-3. **Change frontend config** - Update to port 8587
+3. **Change frontend config** - Update to port 8426
 4. **Restart frontend** - Refresh or restart dev server
 
 ---
 
 ## 🎉 After Fixing
 
-Once you update the port to `8587`:
+Once you update the port to `8426`:
 
 - ✅ No more 401 errors
 - ✅ Posts will load
