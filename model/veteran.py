@@ -221,67 +221,67 @@ class VeteranModel:
             cls._instance  = instance
         return cls._instance
 
-        # =========================================================================
-        # PUBLIC WORKERS — called by service/prediction_service.py
-        # =========================================================================
+    # =========================================================================
+    # PUBLIC WORKERS — called by service/prediction_service.py
+    # =========================================================================
 
-        def predict(self, applicant: dict) -> dict:
-            """
-            WORKER: Runs inference for one applicant.
-            Input is assumed already validated by service/validator.py.
+    def predict(self, applicant: dict) -> dict:
+        """
+        WORKER: Runs inference for one applicant.
+        Input is assumed already validated by service/validator.py.
 
-            Returns:
-                { pvo_direct, refer_out, confidence, top_factors }
-            """
-            X = self._encode_applicant(applicant)
-            refer_proba, direct_proba = np.squeeze(self.model.predict_proba(X))
-            return {
-                'pvo_direct':  round(float(direct_proba), 4),
-                'refer_out':   round(float(refer_proba),  4),
-                'confidence':  self._compute_confidence(direct_proba, refer_proba),
-                'top_factors': self._get_top_factors(),
-            }
+        Returns:
+            { pvo_direct, refer_out, confidence, top_factors }
+        """
+        X = self._encode_applicant(applicant)
+        refer_proba, direct_proba = np.squeeze(self.model.predict_proba(X))
+        return {
+            'pvo_direct':  round(float(direct_proba), 4),
+            'refer_out':   round(float(refer_proba),  4),
+            'confidence':  self._compute_confidence(direct_proba, refer_proba),
+            'top_factors': self._get_top_factors(),
+        }
 
-        def feature_weights(self) -> dict:
-            """
-            WORKER: Returns {feature_name: importance_score} for all non-zero features.
-            """
-            return {f: round(float(i), 4)
-                    for f, i in zip(self.features, self.dt.feature_importances_)
-                    if i > 0}
-
-
-    # ── Init / test helpers ───────────────────────────────────────────────────────
-
-    def initVeteran() -> None:
-        """Warms the singleton at app startup. Call from generate_data CLI command."""
-        VeteranModel.get_instance()
+    def feature_weights(self) -> dict:
+        """
+        WORKER: Returns {feature_name: importance_score} for all non-zero features.
+        """
+        return {f: round(float(i), 4)
+                for f, i in zip(self.features, self.dt.feature_importances_)
+                if i > 0}
 
 
-    def testVeteran() -> None:
-        """Smoke-tests predict() with two representative cases."""
-        model = VeteranModel.get_instance()
+# ── Init / test helpers ───────────────────────────────────────────────────────
 
-        cases = [
-            {'label': 'Poway veteran — utility, disabled',
-            'data':  {'need_type':'utility','location':'poway','vet_status':'veteran',
-                    'employment':'disabled','housing_risk':0,'household_sz':2,'has_va_care':1}},
-            {'label': 'Out-of-area veteran — legal, unemployed',
-            'data':  {'need_type':'legal','location':'outside_area','vet_status':'veteran',
-                    'employment':'unemployed','housing_risk':0,'household_sz':1,'has_va_care':0}},
-        ]
-
-        for case in cases:
-            r = model.predict(case['data'])
-            print(f"\n{case['label']}")
-            print(f"  PVO direct: {r['pvo_direct']:.2%}  |  Refer out: {r['refer_out']:.2%}")
-            print(f"  Confidence: {r['confidence']}  |  Top factors: {r['top_factors']}")
-
-        print("\nTop feature weights:")
-        for feat, imp in sorted(model.feature_weights().items(),
-                                key=lambda x: x[1], reverse=True)[:6]:
-            print(f"  {feat}: {imp:.2%}")
+def initVeteran() -> None:
+    """Warms the singleton at app startup. Call from generate_data CLI command."""
+    VeteranModel.get_instance()
 
 
-    if __name__ == '__main__':
-        testVeteran()
+def testVeteran() -> None:
+    """Smoke-tests predict() with two representative cases."""
+    model = VeteranModel.get_instance()
+
+    cases = [
+        {'label': 'Poway veteran — utility, disabled',
+         'data':  {'need_type':'utility','location':'poway','vet_status':'veteran',
+                   'employment':'disabled','housing_risk':0,'household_sz':2,'has_va_care':1}},
+        {'label': 'Out-of-area veteran — legal, unemployed',
+         'data':  {'need_type':'legal','location':'outside_area','vet_status':'veteran',
+                   'employment':'unemployed','housing_risk':0,'household_sz':1,'has_va_care':0}},
+    ]
+
+    for case in cases:
+        r = model.predict(case['data'])
+        print(f"\n{case['label']}")
+        print(f"  PVO direct: {r['pvo_direct']:.2%}  |  Refer out: {r['refer_out']:.2%}")
+        print(f"  Confidence: {r['confidence']}  |  Top factors: {r['top_factors']}")
+
+    print("\nTop feature weights:")
+    for feat, imp in sorted(model.feature_weights().items(),
+                            key=lambda x: x[1], reverse=True)[:6]:
+        print(f"  {feat}: {imp:.2%}")
+
+
+if __name__ == '__main__':
+    testVeteran()
