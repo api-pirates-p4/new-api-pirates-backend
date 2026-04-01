@@ -59,13 +59,6 @@ import os
 import requests
 
 # Load environment variables
-load_dotenv()
-app = Flask(__name__)
-CORS(app, supports_credentials=True)
-
-app.config['KASM_SERVER'] = os.getenv('KASM_SERVER')
-app.config['KASM_API_KEY'] = os.getenv('KASM_API_KEY')
-app.config['KASM_API_KEY_SECRET'] = os.getenv('KASM_API_KEY_SECRET')
 
 
 
