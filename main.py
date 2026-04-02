@@ -49,6 +49,7 @@ from model.post import Post, init_posts
 from model.microblog import MicroBlog, Topic, initMicroblogs
 from hacks.jokes import initJokes 
 from api.volunteer import volunteer_api
+from model.titanic import initTitanic
 from api.titanic import titanic_api
 
 # from model.announcement import Announcement ##temporary revert

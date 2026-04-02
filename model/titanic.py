@@ -175,10 +175,6 @@ def initTitanic():
     Loads and trains the model into memory so that the first prediction
     request is not delayed by training time.
 
-    Usage in main.py:
-        @custom_cli.command('generate_data')
-        def generate_data():
-            initTitanic()
     """
     TitanicModel.get_instance()
 
