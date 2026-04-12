@@ -65,7 +65,6 @@ class VolunteerAPI(Resource):                       # ← new
     def get(self):
         return jsonify(volunteer_model.read())
     
-api.add_resource(DataAPI, '/api/data')
 api.add_resource(VolunteerAPI, '/api/volunteers')
 
 # Wee can use @app.route for HTML endpoints, this will be style for Admin UI
