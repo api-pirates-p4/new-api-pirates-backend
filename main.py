@@ -198,6 +198,16 @@ def reset_password(user_id):
         return jsonify({'message': 'Password reset successfully'}), 200
     return jsonify({'error': 'Password reset failed'}), 500
 
+@app.route('/veterans_data')
+@login_required
+def veterans_data():
+    import sqlite3
+    conn = sqlite3.connect('/app/instance/pvo.db')
+    conn.row_factory = sqlite3.Row
+    rows = conn.execute("SELECT * FROM prescreener_submissions ORDER BY submitted_at DESC").fetchall()
+    conn.close()
+    return render_template("veterans_data.html", veterans=[dict(r) for r in rows])
+
 @app.route('/kasm_users')
 def kasm_users():
     # Fetch configuration details from environment or app config

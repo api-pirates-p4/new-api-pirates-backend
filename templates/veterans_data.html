@@ -1,0 +1,34 @@
+{% extends "layouts/base.html" %}
+{% set project = "Veterans Data" %}
+
+{% block body %}
+<div class="px-5 py-5 mx-auto">
+    <h1 class="text-white"><strong>Veteran Prescreener Submissions</strong></h1>
+    <table id="veteransTable" class="table table-dark table-striped">
+        <thead>
+            <tr>
+                <th>ID</th><th>Submitted</th><th>Need Type</th><th>Location</th>
+                <th>Vet Status</th><th>Employment</th><th>Housing Risk</th>
+                <th>Household Size</th><th>Has VA Care</th><th>Confidence</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for v in veterans %}
+            <tr>
+                <td>{{ v.id }}</td>
+                <td>{{ v.submitted_at }}</td>
+                <td>{{ v.need_type }}</td>
+                <td>{{ v.location }}</td>
+                <td>{{ v.vet_status }}</td>
+                <td>{{ v.employment }}</td>
+                <td>{{ v.housing_risk }}</td>
+                <td>{{ v.household_sz }}</td>
+                <td>{{ v.has_va_care }}</td>
+                <td>{{ v.confidence }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<script>$(document).ready(function(){ $('#veteransTable').DataTable(); });</script>
+{% endblock %}
