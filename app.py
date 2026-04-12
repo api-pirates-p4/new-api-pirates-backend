@@ -2,7 +2,6 @@
 from flask import Flask, jsonify, request
 from flask_cors import CORS
 from flask_restful import Api, Resource
-from volunteer_model import VolunteerModel
 volunteer_model = VolunteerModel()
 
 app = Flask(__name__)
