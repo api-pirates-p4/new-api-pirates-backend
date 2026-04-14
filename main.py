@@ -208,6 +208,17 @@ def veterans_data():
     conn.close()
     return render_template("veterans_data.html", veterans=[dict(r) for r in rows])
 
+@app.route('/volunteers_data')
+@login_required
+def volunteers_data():
+    import sqlite3, os
+    db_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "instance", "volunteers.db")
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = sqlite3.Row
+    rows = conn.execute("SELECT * FROM volunteers ORDER BY id DESC").fetchall()
+    conn.close()
+    return render_template("volunteers_data.html", volunteers=[dict(r) for r in rows])
+
 @app.route('/kasm_users')
 def kasm_users():
     # Fetch configuration details from environment or app config

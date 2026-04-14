@@ -1,10 +1,16 @@
 import sqlite3
+import os
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DEFAULT_DB_PATH = os.path.join(BASE_DIR, "instance", "volunteers.db")
 
 class VolunteerModel:
-    def __init__(self, db_path="volunteers.db"):
+    def __init__(self, db_path=DEFAULT_DB_PATH):
+        os.makedirs(os.path.dirname(db_path), exist_ok=True)
         self.db_path = db_path
         self._init_db()
-
+    # ... rest unchanged
+    
     def _init_db(self):
         conn = sqlite3.connect(self.db_path)
         conn.execute("""
