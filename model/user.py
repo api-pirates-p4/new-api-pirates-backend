@@ -10,6 +10,7 @@ import json
 from __init__ import app, db
 from model.github import GitHubUser
 from model.kasm import KasmUser
+from model.persona import Persona 
 
 """ Helper Functions """
 
