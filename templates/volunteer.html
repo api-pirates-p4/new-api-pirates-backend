@@ -1,0 +1,29 @@
+{% extends "layouts/base.html" %}
+{% set project = "Volunteers Data" %}
+{% block body %}
+<div class="px-5 py-5 mx-auto">
+    <h1 class="text-white"><strong>Volunteer Submissions</strong></h1>
+    <table id="volunteersTable" class="table table-dark table-striped">
+        <thead>
+            <tr>
+                <th>ID</th><th>Name</th><th>Email</th><th>Phone</th>
+                <th>Availability</th><th>Skills</th><th>Submitted</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for v in volunteers %}
+            <tr>
+                <td>{{ v.id }}</td>
+                <td>{{ v.name }}</td>
+                <td>{{ v.email }}</td>
+                <td>{{ v.phone }}</td>
+                <td>{{ v.availability }}</td>
+                <td>{{ v.skills }}</td>
+                <td>{{ v.submitted_at }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+<script>$(document).ready(function(){ $('#volunteersTable').DataTable(); });</script>
+{% endblock %}

@@ -25,6 +25,7 @@ from api.pfp import pfp_api
 from api.analytics import analytics_api
 from api.student import student_api
 from api.groq_api import groq_api
+from api.pvo_chatbot_api import pvo_chatbot_api
 from api.gemini_api import gemini_api
 from api.microblog_api import microblog_api
 from api.classroom_api import classroom_api
@@ -71,6 +72,7 @@ app.register_blueprint(section_api)
 app.register_blueprint(persona_api)
 app.register_blueprint(pfp_api) 
 app.register_blueprint(groq_api)
+app.register_blueprint(pvo_chatbot_api)
 app.register_blueprint(gemini_api)
 app.register_blueprint(microblog_api)
 
@@ -207,6 +209,17 @@ def veterans_data():
     rows = conn.execute("SELECT * FROM prescreener_submissions ORDER BY submitted_at DESC").fetchall()
     conn.close()
     return render_template("veterans_data.html", veterans=[dict(r) for r in rows])
+
+@app.route('/volunteers_data')
+@login_required
+def volunteers_data():
+    import sqlite3, os
+    db_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "instance", "volunteers.db")
+    conn = sqlite3.connect(db_path)
+    conn.row_factory = sqlite3.Row
+    rows = conn.execute("SELECT * FROM volunteers ORDER BY id DESC").fetchall()
+    conn.close()
+    return render_template("volunteers_data.html", volunteers=[dict(r) for r in rows])
 
 @app.route('/kasm_users')
 def kasm_users():
